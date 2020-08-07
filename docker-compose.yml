@@ -1,0 +1,28 @@
+version: 3
+
+networks:
+  backend:
+
+services:
+
+  php-fpm:
+    build:
+      context: ./php-fpm
+      network: backend
+    env_file:
+      - ./.env
+    expose:
+      - "9000"
+
+  ningx:
+    build:
+      context: ./nginx
+      network: backend
+    env_file:
+      - ./.env
+    depends_on:
+      - php-fpm
+
+  mysql:
+    build:
+      context: ./mysql
