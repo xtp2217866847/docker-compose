@@ -46,12 +46,4 @@ RUN set -eux; \
 #        pecl install swoole; \
 #        docker-php-ext-enable swoole
 
-RUN set -eux; \
-        \
-        php -r "copy('https://install.phpcomposer.com/installer', 'composer-setup.php');" \
-        php composer-setup.php \
-        php -r "unlink('composer-setup.php');" \
-#        curl -L https://getcomposer.org/installer | php; \
-        mv composer.phar /usr/local/bin/composer
-
 CMD ["php-fpm"]

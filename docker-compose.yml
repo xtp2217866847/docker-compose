@@ -6,17 +6,35 @@ networks:
 
 services:
 
+#  worker:
+#    build:
+#      context: ./worker
+#      args:
+#        - http_proxy
+#        - https_proxy
+#        - no_proxy
+#    env_file:
+#      - ./.env
+#    volumes:
+#      - ~/.ssh:/root/.ssh
+#      - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+#    tty: true
+#    networks:
+#      - backend
+
   php-fpm:
     build:
       context: ./php-fpm
     env_file:
       - ./.env
+    volumes:
+      - ${APP_CODE_PATH_HOST}:/var/www/html${APP_CODE_CONTAINER_FLAG}
     expose:
       - "9000"
     networks:
       - backend
 
-  ningx:
+  nginx:
     build:
       context: ./nginx
       args:
