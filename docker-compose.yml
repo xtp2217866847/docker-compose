@@ -32,8 +32,9 @@ services:
       - ./php-fpm/php7.4.ini:/usr/local/etc/php/php.ini
     expose:
       - "9000"
-      - "9501"
-      - "9502"
+    ports:
+      - "9501:9501"
+      - "9502:9502"
     networks:
       - backend
 
