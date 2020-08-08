@@ -41,9 +41,17 @@ RUN set -eux; \
                 sockets \
                 zip \
         ; \
-        pecl install redis; \
-        docker-php-ext-enable redis
-#        pecl install swoole; \
-#        docker-php-ext-enable swoole
+        pecl install redis && \
+        docker-php-ext-enable redis && \
+        pecl install swoole && \
+        docker-php-ext-enable swoole
+
+RUN set -eux; \
+        \
+        php -r "copy('https://install.phpcomposer.com/installer', 'composer-setup.php');" && \
+        php composer-setup.php && \
+        php -r "unlink('composer-setup.php');" && \
+        mv composer.phar /usr/local/bin/composer && \
+        composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 
 CMD ["php-fpm"]
