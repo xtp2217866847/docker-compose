@@ -54,4 +54,11 @@ RUN set -eux; \
         mv composer.phar /usr/local/bin/composer && \
         composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 
+# optmize
+RUN apt-get update && \
+    apt-get install vim -y
+#    apt-get install zsh -y && \
+#    chsh -s /bin/zsh && \
+#    sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+
 CMD ["php-fpm"]

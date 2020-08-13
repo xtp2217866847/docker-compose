@@ -91,3 +91,49 @@ services:
       - "${REDIS_PORT}:6379"
     networks:
       - backend
+
+  consul:
+    image: consul:latest
+    expose:
+      - "8500"
+    networks:
+      - backend
+    volumes:
+      - ./consul/data:/consul/data
+      - ./consul/config:/consul/config
+    ports:
+      - "8300:8300"
+      - "8301:8301"
+      - "8301:8301/udp"
+      - "8302:8302"
+      - "8302:8302/udp"
+      - "8400:8400"
+      - "53:53/udp"
+      - "8500:8500"
+    command: agent -dev -client=0.0.0.0 -ui
+
+  elasticsearch:
+    image: elasticsearch:7.7.0
+    environment:
+#      - "cluster.name=elasticsearch" #设置集群名称为elasticsearch
+#      - "discovery.type=single-node" #以单一节点模式启动
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" #设置使用jvm内存大小
+    volumes:
+      - ./elasticsearch/plugins:/usr/share/elasticsearch/plugins #插件文件挂载
+      - ./elasticsearch/data:/usr/share/elasticsearch/data #数据文件挂载
+#      - ./elas/es.yml:/usr/share/elasticsearch/config/elasticsearch.yml #启动文件挂载
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
+  kibana:
+    image: kibana:7.7.0
+    depends_on:
+      - elasticsearch #kibana在elasticsearch启动之后再启动
+    environment:
+      - "elasticsearch.hosts=http://127.0.0.1:9200" #设置访问elasticsearch的地址
+    ports:
+      - 5601:5601
