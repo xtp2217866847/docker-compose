@@ -40,6 +40,7 @@ RUN set -eux; \
                 pdo_mysql \
                 sockets \
                 zip \
+                bcmath \
         ; \
         pecl install redis && \
         docker-php-ext-enable redis && \
