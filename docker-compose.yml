@@ -35,6 +35,7 @@ services:
     ports:
       - "9501:9501"
       - "9502:9502"
+      - "9505:9505"
     networks:
       - backend
 
@@ -131,6 +132,9 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
+    networks:
+      - backend
+
   kibana:
     image: kibana:7.7.0
     depends_on:
@@ -139,3 +143,31 @@ services:
       - "elasticsearch.hosts=elasticsearch:9200" #设置访问elasticsearch的地址
     ports:
       - 5601:5601
+    networks:
+      - backend
+
+  zipkin:
+    image: openzipkin/zipkin
+    expose:
+      - 9411
+    ports:
+      - 9411:9411
+    networks:
+      - backend
+
+  # https://prometheus.io/docs/prometheus/latest/installation/
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - backend
+  # https://grafana.com/docs/installation/docker/
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - backend
