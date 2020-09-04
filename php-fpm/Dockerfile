@@ -62,4 +62,13 @@ RUN apt-get update && \
 #    chsh -s /bin/zsh && \
 #    sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 
+## 安装zsh工具 方便容器内调试开发
+COPY install.sh /home/install.sh
+RUN apt-get -y install zsh && /bin/bash /home/install.sh && chsh -s /bin/zsh
+COPY zsh-autosuggestions.tar.bz2 /root/.oh-my-zsh/custom/plugins/zsh-autosuggestions.tar.bz2
+RUN cd /root/.oh-my-zsh/custom/plugins/ && tar xvf zsh-autosuggestions.tar.bz2 && chmod -R 755 zsh-autosuggestions && chown -R root.root zsh-autosuggestions  && rm -rf /root/.zshrc
+COPY zshrc /root/.zshrc
+COPY zsh-syntax-highlighting /root/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+RUN echo export LC_ALL=C.UTF-8 >> ~/.bashrc && echo export LANG=C.UTF-8 >> ~/.bashrc
+
 CMD ["php-fpm"]

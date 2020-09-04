@@ -114,13 +114,13 @@ services:
     command: agent -dev -client=0.0.0.0 -ui
 
   elasticsearch:
-    image: elasticsearch:7.7.0
+    build: ./elasticsearch
     environment:
       - "cluster.name=elasticsearch" #设置集群名称为elasticsearch
       - "discovery.type=single-node" #以单一节点模式启动
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m" #设置使用jvm内存大小
     volumes:
-      - ./elasticsearch/plugins:/usr/share/elasticsearch/plugins #插件文件挂载
+#      - ./elasticsearch/plugins:/usr/share/elasticsearch/plugins #插件文件挂载
       - ./elasticsearch/data:/usr/share/elasticsearch/data #数据文件挂载
 #      - ./elas/es.yml:/usr/share/elasticsearch/config/elasticsearch.yml #启动文件挂载
     ulimits:
